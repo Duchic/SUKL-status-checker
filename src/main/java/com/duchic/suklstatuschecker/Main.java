@@ -2,18 +2,19 @@ package com.duchic.suklstatuschecker;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
 
     Document doc;
 
     public static final String url = "https://www.epreskripce.cz/stav-systemu-erecept";
+    public String status = "unknown";
+    String bezOmezeni = null;
+    String sOmezenim = null;
+    String nedostupny = null;
 
     public Main(){
 
@@ -36,16 +37,23 @@ public class Main {
         }
 
         Elements products = doc.select("ul.semafor");
-        System.out.println(products.toString());
-        getElementsToList(products);
+
+        bezOmezeni = products.get(0).getAllElements().get(1).attributes().get("class");
+        sOmezenim = products.get(0).getAllElements().get(4).attributes().get("class");
+        nedostupny = products.get(0).getAllElements().get(7).attributes().get("class");
+        getStatus(bezOmezeni,sOmezenim,nedostupny);
     }
 
-    public void getElementsToList(Elements products) { //zatim nefunkcni
-        List<Element> list = new ArrayList<>();
-
-        for (int i=0; i<products.size(); i++) {
-            list.set(i,products.get(i));
-            System.out.println(list.get(i).toString());
+    public void getStatus(String bezOmezeni, String sOmezenim, String nedostupny) {
+        if (bezOmezeni.contains("neaktivni")){
+            if (sOmezenim.contains("neaktivni")){
+                status = "nedostupny";
+            } else {
+                status = "s omezenim";
+            }
+        } else {
+            status = "bez omezeni";
         }
+        System.out.println("status: " + status);
     }
 }
