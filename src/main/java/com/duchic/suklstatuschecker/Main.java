@@ -11,21 +11,26 @@ public class Main {
     Document doc;
 
     private static final String url = "https://www.epreskripce.cz/stav-systemu-erecept";
-    private String status = "unknown";
-    private String bezOmezeni = null;
-    private String sOmezenim = null;
-    private String nedostupny = null;
+    private String status;
+    private String bezOmezeni;
+    private String sOmezenim;
+    private String nedostupny;
     private static String appToken;
     private static String userToken;
 
 
     public Main(){
-
+        this.bezOmezeni = null;
+        this.sOmezenim = null;
+        this.nedostupny = null;
+        this.status = "unknown";
     }
 
     public static void main(String[] args) {
         appToken = args[0];
         userToken = args[1];
+        System.out.println("appToken: " + appToken);
+        System.out.println("userToken: " + userToken);
         Main run = new Main();
         run.fetchTargetWebsite(url);
     }
@@ -53,11 +58,14 @@ public class Main {
         if (bezOmezeni.contains("neaktivni")){
             if (sOmezenim.contains("neaktivni")){
                 status = "nedostupny";
+                sendPushoverNotification(status);
             } else {
                 status = "s omezenim";
+                sendPushoverNotification(status);
             }
         } else {
             status = "bez omezeni";
+            sendPushoverNotification(status);
         }
         System.out.println("status: " + status);
     }
@@ -66,6 +74,7 @@ public class Main {
         try {
             Pushover pushover = new Pushover(appToken, userToken);
             pushover.sendMessage(status,"Stav eReceptu");
+            System.out.println("notifikace odeslana");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
