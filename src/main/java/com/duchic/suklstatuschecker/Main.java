@@ -9,7 +9,6 @@ import java.io.IOException;
 public class Main {
 
     Document doc;
-
     private static final String url = "https://www.epreskripce.cz/stav-systemu-erecept";
     private String status;
     private String bezOmezeni;
@@ -27,10 +26,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        appToken = args[0];
-        userToken = args[1];
-        System.out.println("appToken: " + appToken);
-        System.out.println("userToken: " + userToken);
+        appToken = args[0]; //ulozi appToken na Pushover z parametru
+        userToken = args[1]; //ulozi userToken na Pushover z paramteru
         Main run = new Main();
         run.fetchTargetWebsite(url);
     }
@@ -46,7 +43,7 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        Elements products = doc.select("ul.semafor");
+        Elements products = doc.select("ul.semafor"); //nacte ze stranky css element ul.semafor
 
         bezOmezeni = products.get(0).getAllElements().get(1).attributes().get("class");
         sOmezenim = products.get(0).getAllElements().get(4).attributes().get("class");
@@ -67,7 +64,6 @@ public class Main {
             status = "bez omezeni";
             sendPushoverNotification(status);
         }
-        System.out.println("status: " + status);
     }
 
     public void sendPushoverNotification(String status) {
