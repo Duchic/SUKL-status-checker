@@ -22,7 +22,7 @@ public class Main {
         this.bezOmezeni = null;
         this.sOmezenim = null;
         this.nedostupny = null;
-        this.status = "unknown";
+        this.status = "neznámý";
     }
 
     public static void main(String[] args) {
@@ -54,14 +54,14 @@ public class Main {
     public void getStatus(String bezOmezeni, String sOmezenim, String nedostupny) {
         if (bezOmezeni.contains("neaktivni")){
             if (sOmezenim.contains("neaktivni")){
-                status = "nedostupny";
+                status = "NEDOSTUPNÝ";
                 sendPushoverNotification(status);
             } else {
-                status = "s omezenim";
+                status = "S OMEZENÍM";
                 sendPushoverNotification(status);
             }
         } else {
-            status = "bez omezeni";
+            status = "BEZ OMEZENÍ";
             sendPushoverNotification(status);
         }
     }
@@ -69,7 +69,7 @@ public class Main {
     public void sendPushoverNotification(String status) {
         try {
             Pushover pushover = new Pushover(appToken, userToken);
-            pushover.sendMessage(status,"Stav eReceptu");
+            pushover.sendMessage(status,"SÚKL eRecept status");
             System.out.println("notifikace odeslana");
         } catch (IOException e) {
             throw new RuntimeException(e);
