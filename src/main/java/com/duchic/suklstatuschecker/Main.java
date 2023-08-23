@@ -22,7 +22,7 @@ public class Main {
         this.bezOmezeni = null;
         this.sOmezenim = null;
         this.nedostupny = null;
-        this.status = "neznámý";
+        this.status = "neznamy";
     }
 
     public static void main(String[] args) {
@@ -54,14 +54,14 @@ public class Main {
     public void getStatus(String bezOmezeni, String sOmezenim, String nedostupny) {
         if (bezOmezeni.contains("neaktivni")){
             if (sOmezenim.contains("neaktivni")){
-                status = "NEDOSTUPNÝ";
+                status = "NEDOSTUPNY";
                 sendPushoverNotification(status);
             } else {
-                status = "S OMEZENÍM";
+                status = "S OMEZENIM";
                 sendPushoverNotification(status);
             }
         } else {
-            status = "BEZ OMEZENÍ";
+            status = "BEZ OMEZENI";
             sendPushoverNotification(status);
         }
     }
