@@ -16,6 +16,7 @@ public class Main {
     private String nedostupny;
     private static String appToken;
     private static String userToken;
+    private boolean sendNotificationAfterUnavailable = false;
 
 
     public Main(){
@@ -55,14 +56,19 @@ public class Main {
         if (bezOmezeni.contains("neaktivni")){
             if (sOmezenim.contains("neaktivni")){
                 status = "NEDOSTUPNY";
+                sendNotificationAfterUnavailable = true;
                 sendPushoverNotification(status);
             } else {
                 status = "S OMEZENIM";
+                sendNotificationAfterUnavailable = true;
                 sendPushoverNotification(status);
             }
         } else {
             status = "BEZ OMEZENI";
-            sendPushoverNotification(status);
+            if (sendNotificationAfterUnavailable){
+                sendPushoverNotification(status);
+                sendNotificationAfterUnavailable = false;
+            }
         }
     }
 
